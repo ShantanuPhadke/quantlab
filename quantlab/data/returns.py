@@ -10,7 +10,7 @@ def calculate_returns_stats(returns):
         "Mean": returns_without_date.mean(),
         "Standard Deviation": returns_without_date.std(),
         "Skewness": returns_without_date.skew(),
-        "Excess Kurtosis": returns_without_date.kurtosis(),
+        "Excess Kurtosis": returns_without_date.kurtosis() - 3,
         "Minimum": returns_without_date.min(),
         "Maximum": returns_without_date.max()
     })
