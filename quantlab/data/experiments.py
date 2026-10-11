@@ -1,5 +1,6 @@
 from enum import Enum
 import scipy.stats as s
+import pandas as pd
 
 class Experiment:
     def __init__(self, name):
@@ -64,3 +65,72 @@ class Hypothesis:
         self.attribute_name = None
         self.expected_value = None
         self.operator = None
+
+def test_mean_return(dataorpath, company_symbol, mode='file'):
+    # Set up a new experiment to see if the mean oercentage return is 0
+    experiment = Experiment(f"Mean Percentage Return = 0 Test - {company_symbol}")
+    experiment.set_null_hypothesis(Hypothesis("Mean percentage return is 0"))
+    experiment.null_hypothesis.attribute_name = "mean_return"
+    experiment.null_hypothesis.expected_value = 0
+    experiment.null_hypothesis.operator = ComparisonOperator.EQUAL
+    experiment.set_data_value_computation(lambda data: data.mean())
+
+    # Optionally, set the significance level for the experiment
+    experiment.set_significance_level(0.05)
+    # The experiment is now fully set up and ready to be run with data
+    if mode == 'file':
+        combined_returns = pd.read_csv(dataorpath)
+    elif mode == 'dataframe':
+        combined_returns = dataorpath
+    else:
+        raise ValueError("Invalid mode. Use 'file' or 'dataframe'.")
+
+    # Run the experiment with the loaded data
+    experiment.run(combined_returns[company_symbol])
+    print(f"Experiment Result: {experiment.result.value}")
+
+def test_return_skewness(dataorpath, company_symbol, mode='file'):
+    # Set up a new experiment to see if the return skewness is 0
+    experiment = Experiment(f"Return Skewness = 0 Test - {company_symbol}")
+    experiment.set_null_hypothesis(Hypothesis("Return skewness is 0"))
+    experiment.null_hypothesis.attribute_name = "skewness"
+    experiment.null_hypothesis.expected_value = 0
+    experiment.null_hypothesis.operator = ComparisonOperator.EQUAL
+    experiment.set_data_value_computation(lambda data: data.skew())
+
+    # Optionally, set the significance level for the experiment
+    experiment.set_significance_level(0.05)
+    # The experiment is now fully set up and ready to be run with data
+    if mode == 'file':
+        combined_returns = pd.read_csv(dataorpath)
+    elif mode == 'dataframe':
+        combined_returns = dataorpath
+    else:
+        raise ValueError("Invalid mode. Use 'file' or 'dataframe'.")
+
+    # Run the experiment with the loaded data
+    experiment.run(combined_returns[company_symbol])
+    print(f"Experiment Result: {experiment.result.value}")
+
+def test_return_kurtosis(dataorpath, company_symbol, mode='file'):
+    # Set up a new experiment to see if the return kurtosis is 0
+    experiment = Experiment(f"Return Kurtosis = 0 Test - {company_symbol}")
+    experiment.set_null_hypothesis(Hypothesis("Return kurtosis is 3"))
+    experiment.null_hypothesis.attribute_name = "kurtosis"
+    experiment.null_hypothesis.expected_value = 3
+    experiment.null_hypothesis.operator = ComparisonOperator.EQUAL
+    experiment.set_data_value_computation(lambda data: data.kurt())
+
+    # Optionally, set the significance level for the experiment
+    experiment.set_significance_level(0.05)
+    # The experiment is now fully set up and ready to be run with data
+    if mode == 'file':
+        combined_returns = pd.read_csv(dataorpath)
+    elif mode == 'dataframe':
+        combined_returns = dataorpath
+    else:
+        raise ValueError("Invalid mode. Use 'file' or 'dataframe'.")
+
+    # Run the experiment with the loaded data
+    experiment.run(combined_returns[company_symbol])
+    print(f"Experiment Result: {experiment.result.value}")
